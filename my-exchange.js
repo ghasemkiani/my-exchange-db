@@ -43,6 +43,21 @@ class MyExchange extends Obj {
 			await collectionHistory.insertOne({id, exchange, address, date, base, quote, side, price, amount, total});
 		}
 	}
+	async toSetLastSyncDateForExchange({exchange, date}) {
+		let collectionExchanges = this.db.collection("exchanges");
+		let result = await collectionExchanges.findOne({exchange});
+		if(!result) {
+			await collectionExchanges.insertOne({exchange, date});
+		} else {
+			let {_id} = result;
+			await collectionExchanges.updateOne({_id}, {$set: {date}});
+		}
+	}
+	async toGetLastSyncDateForExchange({exchange}) {
+		let collectionExchanges = this.db.collection("exchanges");
+		let result = await collectionExchanges.findOne({exchange});
+		return !result ? null : result.date;
+	}
 }
 cutil.extend(MyExchange.prototype, {
 	dbUrl: "mongodb://127.0.0.1:27017",
