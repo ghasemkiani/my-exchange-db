@@ -40,7 +40,7 @@ class MyExchange extends Obj {
 		let collectionTrades = this.db.collection("trades");
 		let result = await collectionTrades.findOne({id});
 		if(!result) {
-			await collectionHistory.insertOne({id, exchange, address, date, base, quote, side, price, amount, total});
+			await collectionTrades.insertOne({id, exchange, address, date, base, quote, side, price, amount, total});
 		}
 	}
 	async toSetLastSyncDateForExchange({exchange, date}) {
