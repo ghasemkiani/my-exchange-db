@@ -43,20 +43,25 @@ class MyExchange extends Obj {
 			await collectionTrades.insertOne({id, exchange, address, date, base, quote, side, price, amount, total});
 		}
 	}
-	async toSetLastSyncDateForExchange({exchange, date}) {
+	async toSetExchangeInfo({exchange, address, ...info}) {
 		let collectionExchanges = this.db.collection("exchanges");
-		let result = await collectionExchanges.findOne({exchange});
+		let result = await collectionExchanges.findOne({exchange, address});
 		if(!result) {
-			await collectionExchanges.insertOne({exchange, date});
+			await collectionExchanges.insertOne({exchange, address, ...info});
 		} else {
 			let {_id} = result;
-			await collectionExchanges.updateOne({_id}, {$set: {date}});
+			await collectionExchanges.updateOne({_id}, {$set: info});
 		}
 	}
-	async toGetLastSyncDateForExchange({exchange}) {
+	async toGetExchangeInfo({exchange, address}) {
 		let collectionExchanges = this.db.collection("exchanges");
-		let result = await collectionExchanges.findOne({exchange});
-		return !result ? null : result.date;
+		let result = await collectionExchanges.findOne({exchange, address});
+		if (!result) {
+			return null;
+		} else {
+			let {exchange, address, ...info} = result;
+			return info;
+		}
 	}
 }
 cutil.extend(MyExchange.prototype, {
