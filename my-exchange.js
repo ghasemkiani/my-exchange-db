@@ -43,6 +43,15 @@ class MyExchange extends Obj {
 			await collectionTrades.insertOne({id, exchange, address, date, base, quote, side, price, amount, total});
 		}
 	}
+	async toUpdateTrade({id, exchange, address, date, base, quote, side, price, amount, total, nid}) {
+		let collectionTrades = this.db.collection("trades");
+		let result = await collectionTrades.findOne({id});
+		if(result) {
+			let {_id} = result;
+			id = nid || id;
+			await collectionTrades.updateOne({_id}, {$set: {id, exchange, address, date, base, quote, side, price, amount, total}});
+		}
+	}
 	async toSetExchangeInfo({exchange, address, ...info}) {
 		let collectionExchanges = this.db.collection("exchanges");
 		let result = await collectionExchanges.findOne({exchange, address});
