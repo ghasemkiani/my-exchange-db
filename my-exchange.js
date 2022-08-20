@@ -52,6 +52,16 @@ class MyExchange extends Obj {
 			await collectionTrades.updateOne({_id}, {$set: {id, exchange, address, date, base, quote, side, price, amount, total}});
 		}
 	}
+	async toDeleteTrade(id) {
+		let res = null;
+		let collectionTrades = this.db.collection("trades");
+		let result = await collectionTrades.findOne({id});
+		if(result) {
+			let {_id} = result;
+			res = await collectionTrades.deleteOne({_id});
+		}
+		return res;
+	}
 	async toSetExchangeInfo({exchange, address, ...info}) {
 		let collectionExchanges = this.db.collection("exchanges");
 		let result = await collectionExchanges.findOne({exchange, address});
