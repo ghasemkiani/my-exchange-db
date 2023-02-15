@@ -26,12 +26,12 @@ class MyExchange extends Obj {
 	set mongoClient(mongoClient) {
 		this._mongoClient = mongoClient;
 	}
-	async toOpenMongoClient() {
+	async toOpen() {
 		await this.mongoClient.connect();
 		this.db = this.mongoClient.db(this.dbName);
 		return this;
 	}
-	async toCloseMongoClient() {
+	async toClose() {
 		this.db = null;
 		await this.mongoClient.close();
 		return this;
