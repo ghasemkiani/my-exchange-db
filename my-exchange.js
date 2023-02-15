@@ -82,6 +82,45 @@ class MyExchange extends Obj {
 			return info;
 		}
 	}
+	categorize(assetIn, assetOut, amountIn, amountOut) {
+		let base;
+		let amount;
+		let quote;
+		let total;
+		let side;
+		for (let asset of ["BUSD", "USDT", "USDC", "TUSD", "DAI", "UST", "UST_", "BTC", "ETH", "BNB"]) {
+			if (asset === assetOut) {
+				base = assetIn;
+				amount = amountIn;
+				quote = assetOut;
+				total = amountOut;
+				side = "sell";
+				break;
+			} else if (asset === assetIn) {
+				base = assetOut;
+				amount = amountOut;
+				quote = assetIn;
+				total = amountIn;
+				side = "buy";
+				break;
+			}
+		}
+		let aliases = {
+			"WBTC": "BTC",
+			"WETH": "ETH",
+			"WBNB": "BNB",
+			"WMATIC": "MATIC",
+		};
+		for (let [alias, asset] of Object.entries(aliases)) {
+			if (base === alias) {
+				base = asset;
+			}
+			if (quote === alias) {
+				quote = asset;
+			}
+		}
+		return {base, quote, amount, total, side};
+	}
 }
 cutil.extend(MyExchange.prototype, {
 	dbUrl: "mongodb://127.0.0.1:27017",
