@@ -83,12 +83,26 @@ class MyExchange extends Obj {
 		}
 	}
 	categorize(assetIn, assetOut, amountIn, amountOut) {
+		let aliases = {
+			"WBTC": "BTC",
+			"WETH": "ETH",
+			"WBNB": "BNB",
+			"WMATIC": "MATIC",
+		};
+		for (let [alias, asset] of Object.entries(aliases)) {
+			if (base === alias) {
+				base = asset;
+			}
+			if (quote === alias) {
+				quote = asset;
+			}
+		}
 		let base;
 		let amount;
 		let quote;
 		let total;
 		let side;
-		for (let asset of ["BUSD", "USDT", "USDC", "TUSD", "DAI", "UST", "UST_", "BTC", "ETH", "BNB"]) {
+		for (let asset of ["BUSD", "USDT", "USDC", "TUSD", "DAI", "UST", "UST_", "USTC", "BTC", "ETH", "BNB"]) {
 			if (asset === assetOut) {
 				base = assetIn;
 				amount = amountIn;
@@ -105,18 +119,19 @@ class MyExchange extends Obj {
 				break;
 			}
 		}
-		let aliases = {
-			"WBTC": "BTC",
-			"WETH": "ETH",
-			"WBNB": "BNB",
-			"WMATIC": "MATIC",
-		};
-		for (let [alias, asset] of Object.entries(aliases)) {
-			if (base === alias) {
-				base = asset;
-			}
-			if (quote === alias) {
-				quote = asset;
+		if (!base) {
+			if (assetIn < assetOut) {
+				base = assetIn;
+				amount = amountIn;
+				quote = assetOut;
+				total = amountOut;
+				side = "sell";
+			} else {
+				base = assetOut;
+				amount = amountOut;
+				quote = assetIn;
+				total = amountIn;
+				side = "buy";
 			}
 		}
 		return {base, quote, amount, total, side};
