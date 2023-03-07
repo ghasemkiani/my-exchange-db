@@ -90,11 +90,11 @@ class MyExchange extends Obj {
 			"WMATIC": "MATIC",
 		};
 		for (let [alias, asset] of Object.entries(aliases)) {
-			if (base === alias) {
-				base = asset;
+			if (assetIn === alias) {
+				assetIn = asset;
 			}
-			if (quote === alias) {
-				quote = asset;
+			if (assetOut === alias) {
+				assetOut = asset;
 			}
 		}
 		let base;
