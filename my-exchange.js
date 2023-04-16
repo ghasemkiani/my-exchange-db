@@ -41,7 +41,9 @@ class MyExchange extends Obj {
 		let result = await collectionTrades.findOne({id});
 		if(!result) {
 			await collectionTrades.insertOne({id, exchange, address, date, base, quote, side, price, amount, total});
+			return true;
 		}
+		return false;
 	}
 	async toUpdateTrade({id, exchange, address, date, base, quote, side, price, amount, total, nid}) {
 		let collectionTrades = this.db.collection("trades");
@@ -50,7 +52,9 @@ class MyExchange extends Obj {
 			let {_id} = result;
 			id = nid || id;
 			await collectionTrades.updateOne({_id}, {$set: {id, exchange, address, date, base, quote, side, price, amount, total}});
+			return true;
 		}
+		return false;
 	}
 	async toDeleteTrade(id) {
 		let res = null;
