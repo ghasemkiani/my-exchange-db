@@ -8,6 +8,14 @@ import {Obj} from "@ghasemkiani/base";
 import {quantity} from "@ghasemkiani/base-utils";
 
 class MyExchange extends Obj {
+	static {
+		cutil.extend(this.prototype, {
+			dbUrl: "mongodb://127.0.0.1:27017",
+			_dbName: null,
+			_mongoClient: null,
+			db: null,
+		});
+	}
 	get dbName() {
 		if(!this._dbName) {
 			this._dbName = process.env.MY_EXCHANGE_DB_NAME || "myexchange";
@@ -92,6 +100,9 @@ class MyExchange extends Obj {
 			"WETH": "ETH",
 			"WBNB": "BNB",
 			"WMATIC": "MATIC",
+			"WAVAX": "AVAX",
+			"WFTM": "FTM",
+			"TRXB": "TRX",
 		};
 		for (let [alias, asset] of Object.entries(aliases)) {
 			if (assetIn === alias) {
@@ -141,11 +152,5 @@ class MyExchange extends Obj {
 		return {base, quote, amount, total, side};
 	}
 }
-cutil.extend(MyExchange.prototype, {
-	dbUrl: "mongodb://127.0.0.1:27017",
-	_dbName: null,
-	_mongoClient: null,
-	db: null,
-});
 
 export {MyExchange};
