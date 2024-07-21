@@ -95,6 +95,10 @@ class MyExchange extends Obj {
 		}
 	}
 	categorize(assetIn, assetOut, amountIn, amountOut) {
+		// wormhole wrapped assets
+		assetIn = assetIn.replace(/^WH_/i, "");
+		assetOut = assetOut.replace(/^WH_/i, "");
+		
 		let aliases = {
 			"WBTC": "BTC",
 			"WETH": "ETH",
