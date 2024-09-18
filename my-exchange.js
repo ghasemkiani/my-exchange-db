@@ -172,6 +172,7 @@ class MyExchange extends Obj {
     let quote;
     let total;
     let side;
+    
     for (let asset of [
       "BUSD",
       "USDT",
@@ -201,7 +202,29 @@ class MyExchange extends Obj {
         break;
       }
     }
-    if (!base) {
+    
+    // an asset that is always base
+    for (let asset of [
+      "RUNE",
+    ]) {
+      if (asset === assetIn) {
+        base = assetIn;
+        amount = amountIn;
+        quote = assetOut;
+        total = amountOut;
+        side = "sell";
+        break;
+      } else if (asset === assetOut) {
+        base = assetOut;
+        amount = amountOut;
+        quote = assetIn;
+        total = amountIn;
+        side = "buy";
+        break;
+      }
+    }
+    
+    if (cutil.na(base)) {
       if (assetIn < assetOut) {
         base = assetIn;
         amount = amountIn;
